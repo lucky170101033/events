@@ -24,9 +24,11 @@ User = get_user_model()
 
 class RegisterForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Your Full Name'}),required=True)
-    email = forms.EmailField(widget=forms.TextInput(attrs={
-            'class':'form-control',
-            'placeholder':'Your @iitg email'
+    email = forms.CharField(widget=forms.TextInput(attrs={
+            'placeholder':'Your college email (@iitg.ac.in)'
+        }), required=True)
+    username = forms.CharField(widget=forms.TextInput(attrs={
+            'placeholder':'select a username'
         }), required=True)
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Your password'}), required=True)
     confirm_password = forms.CharField( label = 'Confirm Password', widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Your password (again)'}), required=True)
@@ -55,3 +57,12 @@ class RegisterForm(forms.Form):
     #         if not 'iitg.ac.in' in email or not 'iitg.ernet.in' in email:
     #              raise forms.ValidationError('Email must be iitg.ac.in or iitg.ernet.in')
     #         return email
+
+class EventCreatorForm(forms.Form):
+
+    #complete and test by saturday 
+    name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Event Name'}),required=True)
+    event_date = forms.DateField( required=True)
+    event_time = forms.TimeField( required=True)
+    capacity = forms.PositiveIntegerField()
+    fee = forms.PositiveIntegerField()
