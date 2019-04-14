@@ -190,10 +190,6 @@ modules.xml
 
 ### Code ###
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 .history
 # Created by https://www.gitignore.io/api/venv
 # Edit at https://www.gitignore.io/?templates=venv
