@@ -18,7 +18,7 @@ class Event(models.Model):
     time = models.TimeField(auto_now=False, auto_now_add=False)
     faq = models.TextField()
     tags = models.CharField(max_length=300)
-    requester = models.ForeignKey(User, unique=True, on_delete=models.CASCADE)
+    requester = models.ForeignKey(User, on_delete=models.CASCADE)
     invitees = models.CharField(max_length=50)
 
 
@@ -26,19 +26,19 @@ class Event(models.Model):
         return self.name
 
 
-class Poll(models.Model):
-    #TO be tested and debugged by sunday
-    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
-    response_coming = models.PositiveIntegerField()
-    response_not_coming  = models.PositiveIntegerField()
-    response_not_sure = models.PositiveIntegerField()
+# class Poll(models.Model):
+#     #TO be tested and debugged by sunday
+#     event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+#     response_coming = models.PositiveIntegerField()
+#     response_not_coming  = models.PositiveIntegerField()
+#     response_not_sure = models.PositiveIntegerField()
 
-    class Meta:
-        verbose_name = _("Poll")
-        verbose_name_plural = _("Polls")
+#     class Meta:
+#         verbose_name = _("Poll")
+#         verbose_name_plural = _("Polls")
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
-    def get_absolute_url(self):
-        return reverse("Poll_detail", kwargs={"pk": self.pk})
+#     def get_absolute_url(self):
+#         return reverse("Poll_detail", kwargs={"pk": self.pk})

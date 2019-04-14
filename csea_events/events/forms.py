@@ -58,11 +58,11 @@ class RegisterForm(forms.Form):
     #              raise forms.ValidationError('Email must be iitg.ac.in or iitg.ernet.in')
     #         return email
 
-class EventCreatorForm(forms.Form):
+# class EventCreatorForm(forms.Form):
 
-    #complete and test by saturday 
-    name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Event Name'}),required=True)
-    event_date = forms.DateField( required=True)
-    event_time = forms.TimeField( required=True)
-    capacity = forms.PositiveIntegerField()
-    fee = forms.PositiveIntegerField()
+#     #complete and test by saturday 
+#     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Event Name'}),required=True)
+#     event_date = forms.DateField( required=True)
+#     event_time = forms.TimeField( required=True)
+#     capacity = forms.PositiveIntegerField()
+#     fee = forms.PositiveIntegerField()

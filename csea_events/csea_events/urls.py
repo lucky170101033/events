@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.loginPage, name='loginPage'),
     path('register/', views.registerPage, name='register'),
-    path('api/', views.api_resp, name='api_resp'),
+    path('api/login/', views.api_resp, name='api_resp'),
     path('create/', views.create_event, name='creator')
     
 ]
