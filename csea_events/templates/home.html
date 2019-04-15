@@ -1,11 +1,23 @@
 {%extends 'base.html'%}
 {% block content%}
     <div class='col-sm-1'></div>
-    <div class='col-sm-3'>
+    <div class='col-sm-7'>
             <h1 style='font-family: Arial, Helvetica, sans-serif'> Welcome, {{display_id}}</h1>
             <h2 style='font-family: Arial, Helvetica, sans-serif'>Upcoming events: </h2>
             <a href='{% url "create_event" %}'>Create event </a> <br>
             <a href='{% url "logout" %}'>Logout</a>
+            <div >
+
+                    {% for i in events%}
+                    <div class='ui segment'>
+                        <h3 class='ui header'>Event Name: {{ i.name}}</h3>
+                        <h3 class='ui header'>Date: {{ i.date}}</h3>
+                        <h3 class='ui header'>Time: {{i.time}}</h3>
+                        <a href="{% url 'polling' i.event_id %}">Read More</a>
+                    </div>
+                    {% endfor%}
+            </div>
     </div>
+    
 
 {%endblock%}

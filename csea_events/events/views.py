@@ -86,7 +86,7 @@ def create_event(request):
 @login_required(login_url='loginPage')
 def home_page(request):
     events=Event.objects.all().order_by('date')     
-    return render(request, 'home.html', {'display_id':request.user})
+    return render(request, 'home.html', {'display_id':request.user, 'events':events})
 
 #
 # logout view, logs user out and redirects user to login page
@@ -97,6 +97,7 @@ def logout_user(request):
     return redirect('loginPage')
 
 def poll_view(request, event_id):
+    events=Event.objects.filter(event_id=event_id)
     
     return render(request,'home.html')
 
