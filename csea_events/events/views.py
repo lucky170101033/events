@@ -12,7 +12,7 @@ from .models import Event
 # Create your views here.
 # 
 #  The Login Page, if the user already logged in this redirects to homepage
-# 
+# sd
 
 def loginPage(request):
     lform = LoginForm(request.POST or None)
@@ -28,9 +28,12 @@ def loginPage(request):
         password = lform.cleaned_data.get('password')
         user = authenticate(request, username = username, password = password)
         
-        login(request, user)
-        if request.user.is_authenticated:
+        
+        if user is not None:
+            login(request, user)
             return redirect('home_page')
+        else:
+            return redirect('loginPage')
             
     return render(request, 'login.html', context)
 
@@ -85,7 +88,8 @@ def create_event(request):
 #
 @login_required(login_url='loginPage')
 def home_page(request):
-    events=Event.objects.all().order_by('date')     
+    events=Event.objects.all().order_by('date') 
+    print(type(events))    
     return render(request, 'home.html', {'display_id':request.user, 'events':events})
 
 #
