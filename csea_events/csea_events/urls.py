@@ -21,8 +21,11 @@ from events import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.loginPage, name='loginPage'),
+    path('home/',views.home_page, name='home_page'),
     path('register/', views.registerPage, name='register'),
     path('api/', views.api_resp, name='api_resp'),
-    path('create/', views.create_event, name='creator')
+    path('create/', views.create_event, name='create_event'),
+    path('logout/', views.logout_user, name='logout'),
+    path('event/<uuid:event_id>/',views.poll_view,name='polling')
     
 ]

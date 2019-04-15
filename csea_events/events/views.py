@@ -1,30 +1,46 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import LoginForm, RegisterForm  
-from django.contrib.auth import authenticate, login, get_user_model
+from .forms import LoginForm, RegisterForm, EventCreatorForm
+from django.contrib.auth import authenticate, login, get_user_model, logout
 import json
 from django.http import JsonResponse
 import urllib.parse
+from django.contrib.auth.decorators import login_required
+from .models import Event
+
+
 # Create your views here.
+# 
+#  The Login Page, if the user already logged in this redirects to homepage
+# 
 
 def loginPage(request):
     lform = LoginForm(request.POST or None)
     context ={'form':lform}
-    print(request.user.is_authenticated)
+    # print(request.user.is_authenticated)
+
+    if request.user.is_authenticated:
+        return redirect('home_page')
 
     if lform.is_valid():
-        print(lform.cleaned_data)
+        # print(lform.cleaned_data)
         username = lform.cleaned_data.get('email')
         password = lform.cleaned_data.get('password')
         user = authenticate(request, username = username, password = password)
         
         login(request, user)
         if request.user.is_authenticated:
-            return render(request, 'home.html', {'display_id':username})
+            return redirect('home_page')
             
     return render(request, 'login.html', context)
 
 User = get_user_model()
+
+
+# 
+#  The register page, temporary and will be replaced with proper cide from partha
+# 
+
 def registerPage(request):
     rform = RegisterForm(request.POST or None)
     context = {
@@ -41,9 +57,54 @@ def registerPage(request):
         print(add_user)
     return render(request, 'register.html', context)
 
-def create_event(request):
-    return render(request, 'create_event.html', {'display_id':request.user})
 
+# 
+# Create event form page, redirects to login page if user is un-authenticated
+# 
+# 
+@login_required(login_url='loginPage')
+def create_event(request):
+    form = EventCreatorForm(request.POST or None)
+
+    if form.is_valid():
+        new_event=form.save()
+        form = EventCreatorForm()
+    #     capacity = form.cleaned_data.get('capacity')
+    #     name= form.cleaned_data.get('name')
+    #     event_date = form.cleaned_data.get('event_date')
+    #     event_time = form.cleaned_data.get('event_time')
+    #     fee = form.cleaned_data.get('fee')
+    #     summary = form.cleaned_data.get('summary')
+    #     invitees  =form.cleaned_data.get('invitees')
+    #     event_instance = Event(name = name, fee=fee,capacity=capacity,date=event_date, time=event_time, faq=summary, invitees = invitees) 
+    #     event_instance.save()
+    # print(request.user)
+    return render(request, 'create_event.html', {'form':form})
+#
+#Homepage, requires login, has links for everything
+#
+@login_required(login_url='loginPage')
+def home_page(request):
+    events=Event.objects.all().order_by('date')     
+    return render(request, 'home.html', {'display_id':request.user})
+
+#
+# logout view, logs user out and redirects user to login page
+#
+def logout_user(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect('loginPage')
+
+def poll_view(request, event_id):
+    
+    return render(request,'home.html')
+
+
+#
+#REST Api, will be redone once web is finished
+#
+#
 def api_resp(request):
 
     body_unicode = request.body.decode('utf-8')
