@@ -1,0 +1,26 @@
+{%extends 'base.html'%}
+{% block content%}
+    <div class='col-sm-1'></div>
+    <div class='col-sm-7'>
+
+            <div >
+
+                    <div class='ui segment'>
+                        <h3 class='ui header'>Event Name: {{ i.name}}</h3>
+                        <h3 class='ui header'>Date: {{ i.date}}</h3>
+                        <h3 class='ui header'>Time: {{i.time}}</h3>
+                         <h3 class='ui header'>Summery: {{i.summery}}</h3>
+                         <h3 class='ui header'>FAQ: {{i.faq}}</h3>
+                         <h3 class='ui header'>Tags: {{i.tags}}</h3>
+                         <h3 class='ui header'>Fee: {{i.fee}}</h3>
+                         <h3 class='ui header'>Organisors: {{i.organisors}}</h3>
+                         <h3 class='ui header'>Contact info.: {{i.contact_info}}</h3>
+                         <h3 class='ui header'>Target Audience: {{i.target_audience}}</h3>
+
+                    </div>
+
+            </div>
+    </div>
+    
+
+{%endblock%}

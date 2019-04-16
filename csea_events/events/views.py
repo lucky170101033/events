@@ -8,6 +8,7 @@ import urllib.parse
 from django.contrib.auth.decorators import login_required
 from .models import Event
 
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 # Create your views here.
 # 
@@ -56,7 +57,13 @@ def registerPage(request):
         username = rform.cleaned_data.get('username')
         # print(username)
         add_user = User.objects.create_user(username=username, password=password)
-        return render(request, 'register_success.html', context)
+        user = authenticate(request, username = username, password = password)
+        if user is not None:
+            login(request, user)
+            return redirect('home_page')
+        else:
+            return render(request, 'register.html', context)
+        
         print(add_user)
     return render(request, 'register.html', context)
 
@@ -102,33 +109,67 @@ def logout_user(request):
 
 def poll_view(request, event_id):
     events=Event.objects.filter(event_id=event_id)
-    
-    return render(request,'home.html')
+    print(events[0].summary)
+    context = {
+        'event_name': events[0].name,
+        'event_date': events[0].date,
+        'event_time': events[0].time,
+        'event_fee':events[0].fee,
+        'contact_info':events[0].contact_info,
+        'summary':events[0].summary,
+
+    }
+    return render(request,'event_info.html',context)
 
 
 #
 #REST Api, will be redone once web is finished
 #
 #
-def api_resp(request):
 
-    body_unicode = request.body.decode('utf-8')
-    username= request.GET.get('username')
-    password = request.GET.get('password')
+
+@csrf_exempt
+def api_resp(request):
+    username = None
+    password = None
+    # username = request.GET.get('username')
+    # password = request.GET.get('password')
     # body = json.loads(request.body)
     # content = body['content']
     # username = body['username']
     # password = body['password']
-    data = urllib.parse.unquote(request.body.decode('utf-8')).split('&')
-    username = None
-    password = None
-    for i in data:
-        if "username=" in i:
-            username = i[9:]
-            print(username)
-        elif "password=" in i:
-            password = i[9:]
-            print(password)
+    if username is None or password is None:
+        try:
+            # asd = request.query_parms.get('content')
+            # body_unicode = request.body.decode('utf-8')
+
+            # data_json = urllib.parse.unquote(body_unicode)
+            data_json = urllib.parse.unquote(request.body.decode('utf-8'))
+            # pdb.set_trace()
+            data = json.loads(data_json)
+            for key in data:
+                # pdb.set_trace()
+                if key == 'username':
+                    username = data[key]
+                elif key == 'password':
+                    password = data[key]
+                else:
+                    responseData = {
+                        'authentication':'False',
+                        'reason': 'Too many params in the request'
+                    }
+                    return HttpResponse(json.dumps(responseData), content_type="application/json")
+        except:
+            pass
+
+    # print(data)
+    # for i in data:
+    #     if "username=" in i:
+    #         username = i[9:]
+    #         print(username)
+    #     elif "password=" in i:
+    #         password = i[9:]
+    #         print(password)
     if username is None or password is None:
         responseData = {
             'authentication':'False',
@@ -141,6 +182,7 @@ def api_resp(request):
     if user is not None:
         responseData = {
                 'username': username,
+                'password': password,
                 'authenticated':'True',
                 'eventList(example)' : [
                     'xyz',
@@ -156,7 +198,8 @@ def api_resp(request):
     else:
         responseData = {
             'username':username,
+            'password': password,
             'authenticated':'False',
             'reason':'Password or Username is incorrect'
         }
-        return HttpResponse(json.dumps(responseData), content_type="application/json")
+    return HttpResponse(json.dumps(responseData), content_type="application/json")
