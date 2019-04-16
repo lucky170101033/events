@@ -1,0 +1,95 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #id1{
+            color:blue;
+	        text-decoration:bold;
+	        text-decoration:underline;
+	        text-transform:uppercase;
+	        border-color:red;
+	        margin: 30px 40%;
+	        padding: 50px 5%;
+	        }
+	        table{
+	        padding: 1%;
+	        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'main.css'%}">
+
+</head>
+<body>
+<a href = {% url 'reg' %} >Register Now</a>
+<h1>
+    <div id="id1" >
+          All events...
+    </div>
+
+
+
+</h1>
+<div class="events" id="id2">
+    {%for eve in events %}
+    <div class="event">
+        <table>
+            <tr>
+                <td>
+                     <h2>
+           {{eve.name}}
+                     </h2>
+                </td>
+            </tr>
+            <tr>
+                 <td>
+                 <h3>Time:</h3>
+                </td>
+                <td>
+                  {{eve.date}}
+                </td>
+                <td>
+                    {{eve.time}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>
+                        Tag:
+                    </h3>
+                </td>
+                <td>
+                    {{eve.tags}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>
+                        Target audience:
+                    </h3>
+                </td>
+                <td>
+                    {{eve.target_audience}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>
+                        FAQ's:
+                    </h3>
+                </td>
+                <td>
+                    {{eve.faq}}
+                </td>
+            </tr>
+        </table>
+<hr>
+    </div>
+    {%endfor%}
+</div>
+<input type="hidden" name="next" value="{{ request.path }}">
+
+</body>
+</html>

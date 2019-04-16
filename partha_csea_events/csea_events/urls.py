@@ -27,6 +27,7 @@ urlpatterns = [
     path('create/', views.create_event, name='create_event'),
     path('logout/', views.logout_user, name='logout'),
     path('event/<uuid:event_id>/',views.poll_view,name='polling'),
-    path('event/', views.poll_view, name='poll')
-    
+    path('event/', views.poll_view, name='poll'),
+    path('change_passswd/',views.change_password,name='change_passwd'),
+    # path('event_detail/',views.event_details,name='event_detail'),
 ]

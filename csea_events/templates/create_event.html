@@ -1,0 +1,15 @@
+{%extends 'base.html'%}
+{% block content%}
+    <div class='col-sm-1'>
+
+    </div>
+    <div class='col-sm-6' style='margin: 0 auto'>
+
+    <h1 style='font-family: Arial, Helvetica, sans-serif' class=''> Welcome, {{display_id}}</h1>
+    <h2 style='font-family: Arial, Helvetica, sans-serif'>Fill up these details:</h2>
+        <form method='POST' class='ui form'>  {% csrf_token %}
+            {{form}}
+            <input type='submit' class='btn btn-info' value='Submit'>
+        </form>
+    </div>
+{%endblock%}
