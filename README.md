@@ -1,5 +1,5 @@
 # events
-## For recent upload go to testing branch
+## Work till monday has been merged into master, help needed in testing, commenting and styling 
 ## Installation
 If pipenv and python 3.6 installed
 ```
