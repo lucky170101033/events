@@ -1,5 +1,4 @@
 """csea_events URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
 Examples:
@@ -22,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.loginPage),
     path('register/', views.registerPage)
-    
+
 ]

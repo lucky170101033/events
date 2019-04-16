@@ -1,25 +1,30 @@
-<!doctype html>
+{% load static %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/style.css' %}">
     <title>CSEA Event Management</title>
   </head>
-  <body class='text-centre'>
-    <h1 class="col">CSEA Event Management Portal Registration</h1>
-      <div class='col-sm-3'>
-        <form method='POST'>  {% csrf_token %}
-          {{form}}
-          <input type='submit' class='btn btn-info' value='Submit'>
-        </form>
-
-        
+  <body class="text-centre">
+    <div class="container-fluid">
+      <div class="row justify-content-sm-center total">
+        <div class="container-fluid text-primary top">
+          <h1 class="text-center display-4">CSEA Event Management Portal</h1>
+        </div>
+        <div class="col-sm-6 ">
+          <div class='col-sm-auto outerform'>
+            <form method='POST' class="registerform">  {% csrf_token %}
+              {{form}}
+              <input type='submit' class='btn btn-secondary btn-block btn-lg submit'" value='Submit'>
+            </form>
+          </div>
+        </div>
       </div>
+    </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

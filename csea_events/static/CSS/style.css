@@ -1,0 +1,37 @@
+.registerform{
+
+    margin : 8%;
+
+}
+h1{
+
+    margin-top: 2%;
+    margin-bottom: 1%;
+
+}
+.top{
+
+    background-color:#eee2dc;
+
+}
+.outerform{
+
+    border-style: solid;
+    border-radius: 10%;
+    border-width:1px;
+    border-colour: grey;
+    margin: 5%;
+    box-shadow: -10px 10px 150px 25px rgba(255, 255,255, .5);
+    background-color: #c5c6c7;
+}
+.submit{
+
+    margin-top: 4%;
+
+}
+.total{
+
+    background: white url("images/design.png") no-repeat;
+    background-size: cover;
+
+}
