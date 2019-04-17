@@ -328,18 +328,22 @@ def api_getevent(request):
         return HttpResponse(json.dumps(responseData), content_type="application/json")
     # TODO check if event exists
     # user  = authenticate(username = username, password =  password)
-    if user is not None:
-        responseData = {
-            'accepted':False,
-            'error_message': 'Username, Password, RollNo, Year are necessary',
-            'error_code' : 4,
-        }
-        return HttpResponse(json.dumps(responseData), content_type="application/json")
     else:
         responseData = {
             'accepted':True,
             'error_message': '',
             'error_code' : 0,
+            'username' : None,
+            'event_name' : None,
+            'event_fee' : None,
+            'event_exp_audience' : None,
+            'event_venue' : None,
+            'event_date' : None,
+            'event_time' : None,
+            'event_desc' : None,
+            'event_admin_comment' : None,
+            'event_target_audience' : None,
+            'event_poster' : None
         }
         return HttpResponse(json.dumps(responseData), content_type="application/json")
 
