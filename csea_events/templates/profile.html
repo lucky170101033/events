@@ -1,0 +1,19 @@
+{% extends 'base.html'%}
+{% block content %}
+<body>
+    <br>
+    <div class='col-sm-2'></div>
+    <div class='col-sm-4'>
+        <h3>Username: {{username}}</h3>
+        <h3>Name: </h3>
+        <h3>Phone:</h3>
+        <h3>Email:</h3>
+        <h3>Course:</h3>
+        <h3>Year:</h3>
+        <h3>Department:</h3>
+        <a href='{% url "change_passwd" %}' class='ui button'>Change Password</a>
+        <a href='#' class='ui button'>Change Phone Number</a>
+    </div>    
+</body>
+
+{% endblock %}

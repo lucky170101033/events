@@ -1,0 +1,16 @@
+{%extends 'base.html'%}
+{% block content%}
+    <div class='col-sm-1'></div>
+    <div class='col-md-9 '>
+            <h1 style='font-family: Arial, Helvetica, sans-serif'> Welcome</h1>
+            <!--<a href='' class='ui positive button'>Vote Here </a>-->
+            <!-- <br><br> -->
+            <h2 style='font-family: Arial, Helvetica, sans-serif'>Submit your Choice </h2>
+            <form method='POST' class='ui form'>  {% csrf_token %}
+                    {{form}}
+                    <input type='submit' class='btn btn-info' value='Submit'>
+            </form>
+    </div>
+    
+
+{%endblock%}

@@ -276,9 +276,11 @@ def poll_count_view(request,event_id):
 def poll_vote(request,event_id):
     poll=Poll.objects.filter(event_id=event_id)
     form = PollCreatorForm(data=request.POST)
+    print(form.fields['f_value'])
+    print("hello")
     if(request.method=='POST'):
         if form.is_valid():
-            form.save(event_id)
+            poll=form.save(event_id)
             #new_event.event_id=event_id
             #new_event.save()
 
