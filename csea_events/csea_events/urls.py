@@ -16,17 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
-from events import views
+from events import views, api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.loginPage, name='loginPage'),
     path('register/', views.registerPage, name='register'),
-    path('api/login/', views.api_login, name='api_login'),
-    path('api/signup/', views.api_signup, name='api_signup'),
-    path('api/registerevent/', views.api_registerevent, name='api_registerevent'),
-    # path('api/eventdetails/', views.api_eventdetails, name='api_eventdetails'),
-    path('api/feedbackapp/', views.api_feedbackapp, name='api_feedbackapp'),
-    path('api/', views.create_event, name='creator')
+    path('api/login/', api.api_login),
+    path('api/signup/', api.api_signup),
+    path('api/registerevent/', api.api_registerevent),
+    path('api/feedbackapp/', api.api_feedbackapp),
+    path('api/geteventsall', api.get_events_all)
     
 ]
