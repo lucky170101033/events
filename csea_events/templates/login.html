@@ -1,3 +1,5 @@
+
+
 {% extends 'base.html'%}
 
 {% block content %}
@@ -7,9 +9,13 @@
           <h1 class="col">CSEA Events</h1>
         <form method='POST' class='ui form'>  {% csrf_token %}
           {{form}}
+          <br>
           <input type='submit' class='ui primary button' value='Submit'>
 
         </form>
-           <p></p>       <a style='color:rgb(7, 7, 102);margin-top:25px;' href="{% url 'register' %}" >Register Now</a>
+        <br>
+        <a href="{% url 'register' %}" class='ui primary button'>Register Now</a>
         
 {% endblock %}
+
+

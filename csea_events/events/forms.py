@@ -2,6 +2,10 @@ from django import forms
 from django.forms import ModelForm
 from django.contrib.auth import get_user_model
 from . import models
+from .models import Event,Poll
+from django.forms import formset_factory, modelformset_factory
+
+
 class LoginForm(forms.Form):
     email = forms.CharField(widget=forms.TextInput(attrs={
                 'class':'form-control',
@@ -89,4 +93,31 @@ class RegisterForm(forms.Form):
 class EventCreatorForm(ModelForm):
     class Meta:
         model = models.Event
-        fields =['name','fee','capacity','target_audience','date','time','tags','invitees_btech','invitees_mtech','invitees_phd','organisors','contact_info','summary','faq']
+        fields =['name','fee','capacity','target_audience','date','time','tags','invitees_btech','invitees_mtech','invitees_phd','organisors','contact_info','summary','faq','comment_for_admin']
+
+
+# EventFormSet = modelformset_factory(
+#     Event,
+#     fields =('name','fee','capacity','target_audience','date','time','tags','invitees_btech','invitees_mtech','invitees_phd','organisors','contact_info','summary','faq','comment_for_admin'),
+#     extra = 1
+# )
+
+class PollCreatorForm(forms.Form):
+    choices=[
+        ('response_not_coming','Not Coming'),
+        ('response_coming','Coming'),
+        ('response_not_sure','Not Sure'),
+    ]
+    f_value=forms.ChoiceField(choices=choices)
+
+    def save(self,event_id):
+        poll=Poll.objects.filter(event_id=event_id)
+        if (self.fields=='response_not_coming'):
+            poll[0].response_not_coming=poll[0].response_not_coming + 1 
+        elif (self.fields=='response_coming'):
+            poll[0].response_coming = poll[0].response_coming + 1
+        else:
+            poll[0].response_not_sure= poll[0].response_not_sure + 1
+        
+        return 
+

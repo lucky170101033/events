@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import LoginForm, RegisterForm, EventCreatorForm
+from .forms import LoginForm, RegisterForm, EventCreatorForm ,PollCreatorForm
+# , EventFormSet
 from django.contrib.auth import authenticate, login, get_user_model, logout
 import json
 from django.http import JsonResponse
 import urllib.parse
 from django.contrib.auth.decorators import login_required
 from .models import Event
-
+from .models import Poll
+from  django.contrib.auth.forms import PasswordChangeForm
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 # Create your views here.
@@ -20,6 +22,8 @@ def loginPage(request):
     context ={'form':lform}
     # print(request.user.is_authenticated)
 
+
+    
     if request.user.is_authenticated:
         return redirect('home_page')
 
@@ -32,6 +36,7 @@ def loginPage(request):
         
         if user is not None:
             login(request, user)
+            
             return redirect('home_page')
         else:
             return redirect('loginPage')
@@ -40,10 +45,17 @@ def loginPage(request):
 
 User = get_user_model()
 
+# @login_required(login_url='loginPage')
+# def admin_view(request):
 
-# 
+#     return render(request, 'admin.html',{})
+# # 
 #  The register page, temporary and will be replaced with proper cide from partha
 # 
+
+@login_required(login_url='loginPage')
+def profile_view(request):
+    return render(request, 'profile.html',{'username':request.user})
 
 def registerPage(request):
     rform = RegisterForm(request.POST or None)
@@ -96,7 +108,9 @@ def create_event(request):
 @login_required(login_url='loginPage')
 def home_page(request):
     events=Event.objects.all().order_by('date') 
-    print(type(events))    
+   
+    # if str(request.user) == 'admin@iitg.ac.in':
+    #     return redirect('admin-page')
     return render(request, 'home.html', {'display_id':request.user, 'events':events})
 
 #
@@ -125,8 +139,23 @@ def poll_view(request, event_id):
 #
 #REST Api, will be redone once web is finished
 #
-#
 
+
+@login_required(login_url='loginPage')
+def change_password(request):
+    if request.method=='POST':
+        form=PasswordChangeForm(data=request.POST,user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request,form.user)
+            logout(request)
+            return redirect('loginPage')
+        else:
+            return redirect('change_passwd')
+    else:
+        form=PasswordChangeForm(user=request.user)
+        args={'form':form}
+        return render(request,'change_password.html',args)
 
 @csrf_exempt
 def api_resp(request):
@@ -150,8 +179,10 @@ def api_resp(request):
             for key in data:
                 # pdb.set_trace()
                 if key == 'username':
+                    print(data[key])
                     username = data[key]
                 elif key == 'password':
+                    print(data[key])
                     password = data[key]
                 else:
                     responseData = {
@@ -179,16 +210,17 @@ def api_resp(request):
 
     user  = authenticate(username =username,password=  password)
     print(user)
+    event_list = []
+    for i in Event.objects.all():
+        event_list += [i.event_id]
+
+    
     if user is not None:
         responseData = {
                 'username': username,
                 'password': password,
                 'authenticated':'True',
-                'eventList(example)' : [
-                    'xyz',
-                    'pqr',
-                    'abc'
-                ],
+                'eventList(example)' : event_list,
                 'eventDates(example)' : [
                     '201904231415',
                     '201904292000'
@@ -203,3 +235,57 @@ def api_resp(request):
             'reason':'Password or Username is incorrect'
         }
     return HttpResponse(json.dumps(responseData), content_type="application/json")
+
+@login_required(login_url='loginPage')
+def poll_count_view(request,event_id):
+    poll= Event.objects.filter(event_id=event_id)
+    temp=Poll.objects.filter(event_id=event_id)
+    try:
+        print(temp[0])
+        response_coming=temp[0].response_coming
+        response_not_coming=temp[0].response_not_coming
+        response_not_sure=temp[0].response_not_sure
+        context = {
+             'response_coming' : response_coming,
+             'response_not_coming' : response_not_coming,
+            'response_not_sure' : response_not_sure ,
+            'polls' : temp[0],
+            'kk':temp.event_id
+        }
+    except:
+       # print("Exit")
+        temp = Poll(event_id=event_id,response_coming=0,response_not_coming=0,response_not_sure=0)
+       
+
+        response_coming=temp.response_coming
+        response_not_coming=temp.response_not_coming
+        response_not_sure=temp.response_not_sure
+        print(temp.event_id)
+        context = {
+             'response_coming' : response_coming,
+             'response_not_coming' : response_not_coming,
+            'response_not_sure' : response_not_sure ,
+            'polls' : temp,
+            'kk':temp.event_id
+
+        }  
+   # temp.save()
+    return render(request,'poll_view.html',context)
+
+@login_required(login_url='loginPage')
+def poll_vote(request,event_id):
+    poll=Poll.objects.filter(event_id=event_id)
+    form = PollCreatorForm(data=request.POST)
+    if(request.method=='POST'):
+        if form.is_valid():
+            form.save(event_id)
+            #new_event.event_id=event_id
+            #new_event.save()
+
+            form = PollCreatorForm()
+            return redirect('poll_count',event_id)
+        else :
+            return redirect('poll_count_vote', event_id)
+            
+    return render(request, 'poll_vote.html', {'form':form})
+

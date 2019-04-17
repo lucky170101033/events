@@ -1,5 +1,7 @@
 from django.db import models
 import uuid
+from django.contrib.auth.models import AbstractUser
+
 
 from django.contrib.auth.models import User
 
@@ -43,17 +45,28 @@ class Event(models.Model):
     invitees_mtech = models.ManyToManyField(Mtech, help_text=' (Press Ctrl to select multiple)')
     invitees_phd = models.ManyToManyField(PhD)
     # invitees_btech = models.ManyToManyField(Btech, help_text=' (Press Ctrl to select multiple)')
+    comment_for_admin = models.CharField(max_length=300, default='None')
+    
+
     def __str__(self):
         return self.name
 
 
 class Poll(models.Model):
 
-    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event_id = models.UUIDField(primary_key=True, default=uuid.uuid4 ,help_text='Unique poll id')
     response_coming = models.PositiveIntegerField()
     response_not_coming  = models.PositiveIntegerField()
     response_not_sure = models.PositiveIntegerField()
 
+    def __str__(self):
+        return self.event_id
 
 
 
+
+# class CustomUser(AbstractUser):
+#     # add additional fields in here
+
+#     def __str__(self):
+#         return self.email
