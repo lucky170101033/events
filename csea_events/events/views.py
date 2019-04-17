@@ -242,6 +242,7 @@ def poll_count_view(request,event_id):
     temp=Poll.objects.filter(event_id=event_id)
     try:
         print(temp[0])
+       # print('hello world')
         response_coming=temp[0].response_coming
         response_not_coming=temp[0].response_not_coming
         response_not_sure=temp[0].response_not_sure
@@ -260,7 +261,7 @@ def poll_count_view(request,event_id):
         response_coming=temp.response_coming
         response_not_coming=temp.response_not_coming
         response_not_sure=temp.response_not_sure
-        print(temp.event_id)
+       # print(temp.event_id)
         context = {
              'response_coming' : response_coming,
              'response_not_coming' : response_not_coming,
@@ -269,17 +270,18 @@ def poll_count_view(request,event_id):
             'kk':temp.event_id
 
         }  
-   # temp.save()
+        temp.save()
     return render(request,'poll_view.html',context)
 
 @login_required(login_url='loginPage')
 def poll_vote(request,event_id):
     poll=Poll.objects.filter(event_id=event_id)
     form = PollCreatorForm(data=request.POST)
-    print(form.fields['f_value'])
-    print("hello")
+
     if(request.method=='POST'):
         if form.is_valid():
+            #cleaned_data=form.cleaned_data
+            #print (cleaned_data['f_value'])
             poll=form.save(event_id)
             #new_event.event_id=event_id
             #new_event.save()

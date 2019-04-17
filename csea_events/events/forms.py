@@ -113,24 +113,31 @@ class PollCreatorForm(forms.Form):
     def save(self,event_id):
         poll=Poll.objects.filter(event_id=event_id)
         try:
-            print('hello'+poll[0])
-            if (self.fields=='response_not_coming'):
+            print(poll[0])
+            cleaned_data=self.cleaned_data
+
+            if (cleaned_data['f_value']=='response_not_coming'):
                 poll[0].response_not_coming=poll[0].response_not_coming + 1 
-            elif (self.fields=='response_coming'):
+            elif (cleaned_data['f_value']=='response_coming'):
                 poll[0].response_coming = poll[0].response_coming + 1
             else:
                 poll[0].response_not_sure= poll[0].response_not_sure + 1
+            poll[0].save()    
         except:
             poll=Poll(event_id=event_id,response_not_coming=0,response_coming=0,response_not_sure=0)
-            if (self.fields=='response_not_coming'):
+            cleaned_data=self.cleaned_data
+
+            if (cleaned_data['f_value']=='response_not_coming'):
                 poll.response_not_coming=poll.response_not_coming + 1 
-            elif (self.fields=='response_coming'):
+                print('inside 1st choice')
+            elif (cleaned_data['f_value']=='response_coming'):
                 poll.response_coming = poll.response_coming + 1
             else:
-                poll.response_not_sure= poll.response_not_sure + 1
+                poll.response_not_sure= poll.response_not_sure + 1    
             print(poll.response_coming)
             print(poll.response_not_coming)
             print(poll.response_not_sure)
+            poll.save()
         
         return poll
 
