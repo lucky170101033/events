@@ -22,7 +22,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.loginPage, name='loginPage'),
     path('register/', views.registerPage, name='register'),
-    path('api/login/', views.api_resp, name='api_resp'),
-    path('create/', views.create_event, name='creator')
+    path('api/login/', views.api_login, name='api_login'),
+    path('api/signup/', views.api_signup, name='api_signup'),
+    path('api/registerevent/', views.api_registerevent, name='api_registerevent'),
+    # path('api/eventdetails/', views.api_eventdetails, name='api_eventdetails'),
+    path('api/feedbackapp/', views.api_feedbackapp, name='api_feedbackapp'),
+    path('api/', views.create_event, name='creator')
     
 ]
