@@ -58,13 +58,19 @@ class Poll(models.Model):
     response_coming = models.PositiveIntegerField()
     response_not_coming  = models.PositiveIntegerField()
     response_not_sure = models.PositiveIntegerField()
-    user_id=models.CharField(max_length=100,default='')
+    user_id=models.CharField(max_length=300,default='')
 
 
     def __str__(self):
         return str(self.event_id)
 
+class Vote(models.Model):
+    vote_id=models.UUIDField(primary_key=False, default=uuid.uuid4,help_text='Unique vote id')
+    user_id=models.CharField(max_length=300,default='')
+    user_vote=models.PositiveIntegerField()
 
+    def __str__(self):
+        return str(self.vote_id)
 
 
 # class CustomUser(AbstractUser):
