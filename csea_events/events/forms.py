@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from . import models
 from .models import Event,Poll
 from django.forms import formset_factory, modelformset_factory
-
+import uuid
 
 class LoginForm(forms.Form):
     email = forms.CharField(widget=forms.TextInput(attrs={
@@ -110,34 +110,34 @@ class PollCreatorForm(forms.Form):
     ]
     f_value=forms.ChoiceField(choices=choices)
 
-    def save(self,event_id):
-        poll=Poll.objects.filter(event_id=event_id)
-        try:
-            print(poll[0])
-            cleaned_data=self.cleaned_data
+    def save(self,event_id,poll):
+       # poll=Poll.objects.filter(event_id=event_id)
+        #  try:
+        #     print(poll[0])
+        #     cleaned_data=self.cleaned_data
 
-            if (cleaned_data['f_value']=='response_not_coming'):
-                poll[0].response_not_coming=poll[0].response_not_coming + 1 
-            elif (cleaned_data['f_value']=='response_coming'):
-                poll[0].response_coming = poll[0].response_coming + 1
-            else:
-                poll[0].response_not_sure= poll[0].response_not_sure + 1
-            poll[0].save()    
-        except:
-            poll=Poll(event_id=event_id,response_not_coming=0,response_coming=0,response_not_sure=0)
-            cleaned_data=self.cleaned_data
+        #     if (cleaned_data['f_value']=='response_not_coming'):
+        #         poll[0].response_not_coming=poll[0].response_not_coming + 1 
+        #     elif (cleaned_data['f_value']=='response_coming'):
+        #         poll[0].response_coming = poll[0].response_coming + 1
+        #     else:
+        #         poll[0].response_not_sure= poll[0].response_not_sure + 1
+        #     poll[0].save()    
+        # except:
+        #     poll=Poll(event_id=event_id,response_not_coming=0,response_coming=0,response_not_sure=0) 
+        cleaned_data=self.cleaned_data.get('f_value')
 
-            if (cleaned_data['f_value']=='response_not_coming'):
-                poll.response_not_coming=poll.response_not_coming + 1 
-                print('inside 1st choice')
-            elif (cleaned_data['f_value']=='response_coming'):
-                poll.response_coming = poll.response_coming + 1
-            else:
-                poll.response_not_sure= poll.response_not_sure + 1    
-            print(poll.response_coming)
-            print(poll.response_not_coming)
-            print(poll.response_not_sure)
-            poll.save()
+        if (cleaned_data=='response_not_coming'):
+            poll.response_not_coming=poll.response_not_coming + 1 
+            print('inside 1st choice')
+        elif (cleaned_data=='response_coming'):
+            poll.response_coming = poll.response_coming + 1
+        else:
+            poll.response_not_sure= poll.response_not_sure + 1    
+            #print(poll.response_not_coming)
+            #print(poll.response_coming)
+            #print(poll.response_not_sure)
+        poll.save()
         
         return poll
 

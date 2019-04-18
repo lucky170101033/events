@@ -59,8 +59,9 @@ class Poll(models.Model):
     response_not_coming  = models.PositiveIntegerField()
     response_not_sure = models.PositiveIntegerField()
 
+
     def __str__(self):
-        return self.event_id
+        return str(self.event_id)
 
 
 

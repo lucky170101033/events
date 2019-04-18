@@ -240,52 +240,41 @@ def api_resp(request):
 def poll_count_view(request,event_id):
     poll= Event.objects.filter(event_id=event_id)
     temp=Poll.objects.filter(event_id=event_id)
-    try:
-        print(temp[0])
-       # print('hello world')
-        response_coming=temp[0].response_coming
-        response_not_coming=temp[0].response_not_coming
-        response_not_sure=temp[0].response_not_sure
-        context = {
-             'response_coming' : response_coming,
-             'response_not_coming' : response_not_coming,
-            'response_not_sure' : response_not_sure ,
-            'polls' : temp[0],
-            'kk':temp.event_id
-        }
-    except:
-       # print("Exit")
+    if not temp:
         temp = Poll(event_id=event_id,response_coming=0,response_not_coming=0,response_not_sure=0)
-       
-
         response_coming=temp.response_coming
         response_not_coming=temp.response_not_coming
         response_not_sure=temp.response_not_sure
+        id_event=temp.event_id
+    else:    
+        response_coming=temp[0].response_coming
+        response_not_coming=temp[0].response_not_coming
+        response_not_sure=temp[0].response_not_sure
+        id_event=temp[0].event_id
        # print(temp.event_id)
-        context = {
-             'response_coming' : response_coming,
-             'response_not_coming' : response_not_coming,
-            'response_not_sure' : response_not_sure ,
-            'polls' : temp,
-            'kk':temp.event_id
+    context = {
+        'response_coming' : response_coming,
+        'response_not_coming' : response_not_coming,
+        'response_not_sure' : response_not_sure ,
+        'kk':id_event,
 
-        }  
-        temp.save()
+    }  
+    #temp.save()    
     return render(request,'poll_view.html',context)
 
 @login_required(login_url='loginPage')
 def poll_vote(request,event_id):
-    poll=Poll.objects.filter(event_id=event_id)
+    poll=Poll.objects.get(event_id=event_id)
     form = PollCreatorForm(data=request.POST)
 
     if(request.method=='POST'):
         if form.is_valid():
             #cleaned_data=form.cleaned_data
             #print (cleaned_data['f_value'])
-            poll=form.save(event_id)
+            poll=form.save(event_id,poll)
             #new_event.event_id=event_id
             #new_event.save()
-
+            poll.save()
             form = PollCreatorForm()
             return redirect('poll_count',event_id)
         else :
