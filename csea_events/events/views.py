@@ -246,11 +246,12 @@ def poll_count_view(request,event_id):
         response_not_coming=temp.response_not_coming
         response_not_sure=temp.response_not_sure
         id_event=temp.event_id
-    else:    
-        response_coming=temp[0].response_coming
-        response_not_coming=temp[0].response_not_coming
-        response_not_sure=temp[0].response_not_sure
-        id_event=temp[0].event_id
+        temp.save()
+    else:
+            response_coming=temp[0].response_coming
+            response_not_coming=temp[0].response_not_coming
+            response_not_sure=temp[0].response_not_sure
+            id_event=temp[0].event_id   
        # print(temp.event_id)
     context = {
         'response_coming' : response_coming,
@@ -264,21 +265,40 @@ def poll_count_view(request,event_id):
 
 @login_required(login_url='loginPage')
 def poll_vote(request,event_id):
+    #poll=Poll.objects.filter(event_id=event_id)
+    # if not poll:
+    #     context={
+    #         'kk': event_id,
+    #     }
+    #     return render(request,'error.html',context)
+    # else :    
     poll=Poll.objects.get(event_id=event_id)
-    form = PollCreatorForm(data=request.POST)
+    id_user=str(request.user)
+    temp1=Poll.objects.filter(event_id=event_id)
+    flag=0
+    temp_str=str(temp1[0].user_id)
+    if (temp_str.find(id_user)!=-1):
+        flag=1
+    else :
+        pass    
 
-    if(request.method=='POST'):
-        if form.is_valid():
-            #cleaned_data=form.cleaned_data
-            #print (cleaned_data['f_value'])
-            poll=form.save(event_id,poll)
-            #new_event.event_id=event_id
-            #new_event.save()
-            poll.save()
-            form = PollCreatorForm()
-            return redirect('poll_count',event_id)
-        else :
-            return redirect('poll_count_vote', event_id)
-            
+    if (flag==0):
+        poll.user_id=poll.user_id + id_user + ', '
+        form = PollCreatorForm(data=request.POST)
+
+        if(request.method=='POST'):
+            if form.is_valid():
+                poll=form.save(event_id,poll)
+                poll.save()
+                form = PollCreatorForm()
+                return redirect('poll_count',event_id)
+            else :
+                return redirect('poll_count_vote', event_id)
+    else :
+        context ={
+            'kk':event_id,
+            'everything':id_user
+        }
+        return render(request,'done.html',context=context)        
     return render(request, 'poll_vote.html', {'form':form})
 

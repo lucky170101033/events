@@ -58,6 +58,7 @@ class Poll(models.Model):
     response_coming = models.PositiveIntegerField()
     response_not_coming  = models.PositiveIntegerField()
     response_not_sure = models.PositiveIntegerField()
+    user_id=models.CharField(max_length=100,default='')
 
 
     def __str__(self):
